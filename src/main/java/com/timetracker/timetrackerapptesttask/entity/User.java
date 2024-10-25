@@ -32,6 +32,9 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "priority")
+    private Integer rolePriority;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -40,7 +43,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return email;
     }
 }
 

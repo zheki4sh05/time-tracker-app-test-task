@@ -31,13 +31,17 @@ public class IProjectControlImpl implements IProjectControl {
         project.setName(createProjectDTO.getName());
         project.setDescription(createProjectDTO.getDesc());
 
+        project = projectRepository.save(project);
+
         Participation participation = new Participation();
 
         participation.setProject(project);
         participation.setRole(roleRepository.getWithPriority(RoleDto.ADMIN.getPriority()));
         participation.setUser(user);
 
-        return projectRepository.save(project).getId();
+        participationRepository.save(participation);
+
+        return project.getId();
     }
 
     @Override
@@ -124,5 +128,16 @@ public class IProjectControlImpl implements IProjectControl {
        Participation participation1 =  participationRepository.getByUserId(deleteUserId,participation.getProject().getId(), 2).orElseThrow(EntityNotFoundException::new);
         participationRepository.delete(participation1);
 
+    }
+
+    @Override
+    public Project findById(Long projectId, Long id) throws ProjectNotFoundException {
+
+        Participation participation = participationRepository.findByProjectAndUserId(projectId,id);
+
+        if(participation==null)
+            throw new ProjectNotFoundException();
+
+        return participation.getProject();
     }
 }

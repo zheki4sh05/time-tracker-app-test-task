@@ -37,10 +37,10 @@ public class ProjectController {
             return new ResponseEntity<>("",HttpStatus.NOT_FOUND);
         }
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/items")
     @PreAuthorize(value = "@cse.canAccessUser(#headers)")
     public ResponseEntity<?> deleteProject(@RequestHeader Map<String, String> headers,
-                                                @PathVariable Long id) {
+                                                @RequestParam("id") Long id) {
         try{
             projectControl.deleteProject(id);
             return ResponseEntity.ok(id);
@@ -67,7 +67,6 @@ public class ProjectController {
 
             List<ProjectDto> projects =  projectUserCredentialsFacade.getAuthenticatedUserProjects();
 
-           // List<ProjectDto> projects = projectControl.getAllProjects(userId);
             return ResponseEntity.ok(projects);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("",HttpStatus.NOT_FOUND);
@@ -78,10 +77,10 @@ public class ProjectController {
     @GetMapping("/{id}/workers")
     @PreAuthorize(value = "@cse.canAccessUser(#headers)")
     public ResponseEntity<?> getProjectWorkers(@RequestHeader Map<String, String> headers,
-                                               @RequestParam(value = "id") Long projectId) {
+                                               @PathVariable(value = "id") String projectId) {
 
         try {
-            List<UserRoleInProjectDto> projects = projectControl.getAllWorkers(projectId);
+            List<UserRoleInProjectDto> projects = projectControl.getAllWorkers(Long.parseLong(projectId));
             return new ResponseEntity<>(projects, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("",HttpStatus.NOT_FOUND);

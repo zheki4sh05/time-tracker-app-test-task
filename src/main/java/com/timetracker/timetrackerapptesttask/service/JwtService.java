@@ -1,6 +1,7 @@
 package com.timetracker.timetrackerapptesttask.service;
 
 import com.timetracker.timetrackerapptesttask.entity.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.authority.*;
 import org.springframework.stereotype.*;
 import io.jsonwebtoken.Claims;
@@ -19,7 +20,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+    @Value("secret_key")
+    private String SECRET_KEY;
     public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -56,16 +58,14 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String email = extractUserEmail(token);
-        String emailAuthorities =((SimpleGrantedAuthority)userDetails.getAuthorities().toArray()[0]).getAuthority();
+        String emailAuthorities = userDetails.getUsername();
         boolean result = email.equals(emailAuthorities);
         return result && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
 
-        boolean r = extractExpiration(token).before(new Date());
-        System.out.println(r);
-        return r;
+        return extractExpiration(token).before(new Date());
     }
 
     private Date extractExpiration(String token) {

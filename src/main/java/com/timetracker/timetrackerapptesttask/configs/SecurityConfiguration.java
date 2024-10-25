@@ -1,7 +1,9 @@
 package com.timetracker.timetrackerapptesttask.configs;
 
+import com.timetracker.timetrackerapptesttask.dto.*;
 import lombok.*;
 import org.springframework.context.annotation.*;
+import org.springframework.http.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.config.*;
 import org.springframework.security.config.annotation.method.configuration.*;
@@ -33,6 +35,16 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/project/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/v1/project/**").hasAuthority(RoleDto.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST,"/api/v1/project/**").hasRole(RoleDto.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/project/**").hasAuthority(RoleDto.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/project/").hasAuthority(RoleDto.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST,"/api/v1/activity/**").hasAnyAuthority(RoleDto.ADMIN.name(),RoleDto.USER.name())
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/activity/**").hasAnyAuthority(RoleDto.ADMIN.name(),RoleDto.USER.name())
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/activity/**").hasAuthority(RoleDto.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET,"/api/v1/activity/**").hasAnyAuthority(RoleDto.ADMIN.name(),RoleDto.USER.name())
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

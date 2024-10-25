@@ -2,14 +2,10 @@ package com.timetracker.timetrackerapptesttask.dto;
 
 import lombok.*;
 
-@Builder
-@Data
 @AllArgsConstructor
+@Data
 @NoArgsConstructor
-public class OrderDto {
-
-    private String name;
-    private String startAt;
-    private String finishedAt;
+public class CreateActivityDto {
     private Long projectId;
+    private String name;
 }

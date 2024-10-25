@@ -21,7 +21,6 @@ public class CustomSecurityExpressionImpl implements IControlSecurityExpression 
 
         Boolean isAccessed = getUserEmail(headers).equals(user.getEmail());
 
-        System.out.println("isAccessed " + isAccessed);
 
         return isAccessed;
     }

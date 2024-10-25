@@ -20,4 +20,6 @@ public interface IProjectControl {
     Participation createNewParticipation(AddUserProjectDto addUserProjectDto, Long userId) throws UserIsNotAdminException;
 
      void deleteUser(Long deleteUserId, Long userId, Long projectId);
+
+    Project findById(Long projectId, Long id) throws ProjectNotFoundException;
 }

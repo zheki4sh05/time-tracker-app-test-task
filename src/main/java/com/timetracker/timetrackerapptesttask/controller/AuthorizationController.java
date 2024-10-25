@@ -1,9 +1,11 @@
 package com.timetracker.timetrackerapptesttask.controller;
 
+import com.timetracker.timetrackerapptesttask.exception.*;
 import com.timetracker.timetrackerapptesttask.service.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -13,9 +15,15 @@ public class AuthorizationController {
     private IAuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<?> register(
             @RequestBody RegisterRequest request){
-        return ResponseEntity.ok(service.register(request));
+
+        try{
+            return ResponseEntity.ok(service.register(request));
+        }catch (UserWithSuchEmailAlreadyExistsException e){
+            return new ResponseEntity<>("", HttpStatus.CONFLICT);
+        }
+
     }
 
     @PostMapping("/authenticate")

@@ -1,8 +1,10 @@
 package com.timetracker.timetrackerapptesttask.service.impl;
 
 import com.timetracker.timetrackerapptesttask.controller.*;
+import com.timetracker.timetrackerapptesttask.dto.*;
 import com.timetracker.timetrackerapptesttask.entity.*;
 import com.timetracker.timetrackerapptesttask.entity.User;
+import com.timetracker.timetrackerapptesttask.exception.*;
 import com.timetracker.timetrackerapptesttask.repository.*;
 import com.timetracker.timetrackerapptesttask.service.*;
 import org.springframework.beans.factory.annotation.*;
@@ -11,6 +13,8 @@ import org.springframework.security.core.userdetails.*;
 
 import org.springframework.stereotype.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.*;
 
 @Service
 public class AuthenticationServiceImpl implements IAuthenticationService {
@@ -34,21 +38,32 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     private  IControlSecurityExpression customSecurityExpression;
 
     @Override
-    public AuthenticationResponse register(RegisterRequest request) {
-        var user  = User.builder()
-                .name(request.getName())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
+    public AuthenticationResponse register(RegisterRequest request)throws UserWithSuchEmailAlreadyExistsException {
+
+        Optional<User> userOptional = repository.findByEmail(request.getEmail());
+
+        if(userOptional.isEmpty()){
+            var user  = User.builder()
+                    .name(request.getName())
+                    .lastname(request.getLastname())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .rolePriority(RoleDto.ADMIN.getPriority())
+                    .build();
 
 
-        var savedUser = repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        saveUserToken(savedUser, jwtToken);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+
+            var savedUser = repository.save(user);
+            var jwtToken = jwtService.generateToken(user);
+            saveUserToken(savedUser, jwtToken);
+            return AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .build();
+        }else{
+            throw new UserWithSuchEmailAlreadyExistsException();
+        }
+
+
 
 
     }
@@ -70,6 +85,12 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
 
+        if(request.getRole().equals(RoleDto.ADMIN.name())){
+            user.setRolePriority(RoleDto.ADMIN.getPriority());
+        }else{
+            user.setRolePriority(RoleDto.USER.getPriority());
+        }
+        repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user,jwtToken);

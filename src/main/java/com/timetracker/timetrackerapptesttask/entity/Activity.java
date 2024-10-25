@@ -1,31 +1,40 @@
 package com.timetracker.timetrackerapptesttask.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.*;
+
 @Entity
-@Table(name="participation")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "activity")
 @Builder
-public class Participation {
+public class Activity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role")
-    private Role role;
+    @Column(name="name")
+    private String name;
+
+    @Column(name = "started")
+    private Timestamp started;
+
+    @Column(name = "finished")
+    private Timestamp finished;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "worker")
-    private User user;
+    private User worker;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project")
     private Project project;
+
+
+
 }
