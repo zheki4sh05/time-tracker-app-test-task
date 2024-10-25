@@ -8,6 +8,9 @@ import org.springframework.security.core.authority.*;
 
 import java.util.*;
 
+/**
+ * Dto пользовательских ролей в системе.
+ */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

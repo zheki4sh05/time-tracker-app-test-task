@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthorizationController {
 
     @Autowired
-    private IAuthenticationService service;
+    private IAuthenticationService service; //сервис для управления аутентификацией и авторизацией пользователей
 
     @PostMapping("/register")
     public ResponseEntity<?> register(

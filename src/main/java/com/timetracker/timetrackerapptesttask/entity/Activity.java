@@ -5,6 +5,9 @@ import lombok.*;
 
 import java.sql.*;
 
+/**
+ * Сущность, представляющая активность в проекте.
+ */
 @Entity
 @Data
 @NoArgsConstructor

@@ -9,6 +9,9 @@ import org.springframework.stereotype.*;
 
 import java.util.*;
 
+/**
+ * Сервис для получения автооризованных пользователй.
+ */
 @Service
 public class AuthUserDataImpl implements AuthenticatedUserData {
 
@@ -17,24 +20,26 @@ public class AuthUserDataImpl implements AuthenticatedUserData {
 
     @Autowired
     private IControlSecurityExpression customSecurityExpression;
+
+    //возвращает пользователя по его адресу электронной почты
     @Override
     public Optional<User> getUserByEmail(String email) {
 
         return userRepository.findByEmail(email);
     }
-
+    //возвращает адрес электронной почты текущего пользователя.
     @Override
     public String getCurrentUserEmail() {
 
         return customSecurityExpression.getPrincipal().getEmail();
 
     }
-
+    //возвращает объект текущего пользователя.
     @Override
     public User getCurrentUser() {
         return customSecurityExpression.getPrincipal();
     }
-
+    //преобразует объект пользователя в DTO (UserDto), заполняя его поля.
     @Override
     public UserDto mapFrom(User addUser) {
         return UserDto.builder()

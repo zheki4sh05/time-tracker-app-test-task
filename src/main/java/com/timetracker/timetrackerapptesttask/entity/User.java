@@ -7,7 +7,9 @@ import org.springframework.security.core.authority.*;
 import org.springframework.security.core.userdetails.*;
 
 import java.util.*;
-
+/**
+ * Сущность, представляющая пользователя.
+ */
 @Entity
 @Data
 @NoArgsConstructor

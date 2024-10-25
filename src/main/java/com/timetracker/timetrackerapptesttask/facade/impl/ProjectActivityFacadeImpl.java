@@ -20,9 +20,16 @@ public class ProjectActivityFacadeImpl implements IProjectActivityFacade {
     @Autowired
     private AuthenticatedUserData authenticatedUserData;
 
+    /**
+     * Создает новую активность в проекте для авторизованного пользователя.
+     *
+     * @param activityDto Информация о создаваемой активности.
+     * @return Идентификатор созданной активности.
+     * @throws ProjectNotFoundException Если проект не найден.
+     */
     @Override
     public Long createActivity(CreateActivityDto activityDto) throws ProjectNotFoundException {
-
+        //авторизованный пользователь
         User user = authenticatedUserData.getCurrentUser();
 
         Project project = projectControl.findById(activityDto.getProjectId(),user.getId());

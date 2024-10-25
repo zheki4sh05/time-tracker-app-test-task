@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/time-tracker-app
+    url: jdbc:postgresql://localhost:5432/time-tracker-app?currentSchema=public
     username: postgres
     password: lhs22LI=D=
     driver-class-name: org.postgresql.Driver
@@ -15,4 +15,3 @@ spring:
     default-schema: public
 
 secret_key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-

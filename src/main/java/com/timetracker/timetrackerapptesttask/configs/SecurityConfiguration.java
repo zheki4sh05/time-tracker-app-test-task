@@ -18,6 +18,9 @@ import org.springframework.web.cors.*;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import java.util.*;
 
+/**
+ * Конфигурация безопасности приложения.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -27,14 +30,22 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
+    /**
+     * Конфигурация Spring Security для веб-приложения.
+     *
+     * @param http HttpSecurity объект для настройки правил безопасности.
+     * @return SecurityFilterChain, определяющий, какие запросы разрешены или запрещены.
+     * @throws Exception если возникли ошибки при настройке.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
         http
+                // Включаем поддержку CORS (Cross-Origin Resource Sharing)
                 .cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)// Отключаем CSRF (Cross-Site Request Forgery) защиту
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll() // Разрешаем все запросы, начинающиеся с "/api/v1/auth/"
                         .requestMatchers(HttpMethod.GET,"/api/v1/project/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v1/project/**").hasAuthority(RoleDto.ADMIN.name())
                         .requestMatchers(HttpMethod.POST,"/api/v1/project/**").hasRole(RoleDto.ADMIN.name())
@@ -47,8 +58,11 @@ public class SecurityConfiguration {
 
                         .anyRequest().authenticated()
                 )
+                // Настраиваем управление сессиями (в данном случае, без состояния)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // Предоставляем собственный провайдер аутентификации
                 .authenticationProvider(authenticationProvider)
+                // Добавляем фильтр для обработки JWT-токен
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
                 .logoutUrl("/api/v1/auth/logout")
@@ -58,6 +72,8 @@ public class SecurityConfiguration {
                 ));
         return http.build();
     }
+
+    //конфигурация для обработки cors
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source =

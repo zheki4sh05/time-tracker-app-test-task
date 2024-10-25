@@ -11,7 +11,7 @@ public interface IProjectControl {
 
     void deleteProject(Long id);
 
-    ProjectDto updateProject(ProjectDto projectUpdateDto);
+    ProjectDto updateProject(ProjectDto projectUpdateDto, Long userId);
 
     List<ProjectDto> getAllProjects(Long userId);
 

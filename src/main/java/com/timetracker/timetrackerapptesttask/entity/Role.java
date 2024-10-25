@@ -2,7 +2,9 @@ package com.timetracker.timetrackerapptesttask.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+/**
+ * Сущность, представляющая роль пользователя в каком-то проекте
+ */
 @Entity
 @Table(name="role")
 @Data

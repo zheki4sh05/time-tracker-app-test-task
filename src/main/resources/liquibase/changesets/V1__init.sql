@@ -1,31 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 16.3
--- Dumped by pg_dump version 16.3
-
--- Started on 2024-10-25 19:41:54
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'WIN1253';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
-SET default_tablespace = '';
-
-SET default_table_access_method = heap;
-
---
--- TOC entry 219 (class 1259 OID 16862)
--- Name: activity; Type: TABLE; Schema: public; Owner: postgres
---
 
 CREATE TABLE public.activity (
     started timestamp without time zone,
@@ -39,10 +11,6 @@ CREATE TABLE public.activity (
 
 ALTER TABLE public.activity OWNER TO postgres;
 
---
--- TOC entry 228 (class 1259 OID 16971)
--- Name: activity_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
 
 CREATE SEQUENCE public.activity_id_seq
     AS integer

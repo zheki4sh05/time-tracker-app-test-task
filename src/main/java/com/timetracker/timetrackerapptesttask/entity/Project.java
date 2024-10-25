@@ -3,6 +3,9 @@ package com.timetracker.timetrackerapptesttask.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Сущность пользовательского проекта
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

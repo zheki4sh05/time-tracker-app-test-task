@@ -1,6 +1,7 @@
 package com.timetracker.timetrackerapptesttask.facade;
 
 import com.timetracker.timetrackerapptesttask.dto.*;
+import jakarta.persistence.*;
 
 import java.util.*;
 
@@ -11,5 +12,7 @@ public interface IProjectUserCredentialsFacade {
 
     UserDto addUser(AddUserProjectDto email);
 
-    void deleteByAuthenticatedUser(String email);
+    void deleteByAuthenticatedUser(String email, Long projectId);
+
+    ProjectDto updateProject(ProjectDto projectUpdateDto) throws EntityNotFoundException;
 }

@@ -1,18 +1,14 @@
 package com.timetracker.timetrackerapptesttask.controller;
 
 import com.timetracker.timetrackerapptesttask.dto.*;
-import com.timetracker.timetrackerapptesttask.entity.*;
 import com.timetracker.timetrackerapptesttask.facade.*;
 import com.timetracker.timetrackerapptesttask.service.*;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.NonUniqueResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,15 +17,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProjectController {
 
-    private final IProjectControl projectControl;
-    private final IProjectUserCredentialsFacade projectUserCredentialsFacade;
+    private final IProjectControl projectControl; //сервис для управления проектами
+    private final IProjectUserCredentialsFacade projectUserCredentialsFacade; // фасад для связывания логики работы сервиса пользователей и проекты
+
 
     @PostMapping("/create")
     @PreAuthorize(value = "@cse.canAccessUser(#headers)")
     public ResponseEntity<?> createProject(@RequestHeader Map<String, String> headers,
                                            @RequestBody ProjectDto createProjectDTO) {
         try {
-           // Integer id = projectControl.createNewProject(createProjectDTO);
             Long id = projectUserCredentialsFacade.createNewProject(createProjectDTO);
 
             return ResponseEntity.ok(id);
@@ -53,7 +49,8 @@ public class ProjectController {
     public ResponseEntity<?> updateProject(@RequestHeader Map<String, String> headers,
                                                 @RequestBody ProjectDto projectUpdateDto) {
         try {
-        ProjectDto projectDto =  projectControl.updateProject(projectUpdateDto);
+
+            ProjectDto projectDto = projectUserCredentialsFacade.updateProject(projectUpdateDto);
             return ResponseEntity.ok(projectDto);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("",HttpStatus.NOT_FOUND);
@@ -105,13 +102,14 @@ public class ProjectController {
     }
 
     @CrossOrigin
-    @DeleteMapping("/{email}")
+    @DeleteMapping("/user")
     @PreAuthorize(value = "@cse.canAccessUser(#headers)")
     public ResponseEntity<?> deleteUserFromProject(@RequestHeader Map<String, String> headers,
-                                              @PathVariable(value = "email") String email) {
+                                              @RequestParam(value = "email") String email,
+                                                   @RequestParam(value = "projectId") Long projectId) {
 
         try {
-            projectUserCredentialsFacade.deleteByAuthenticatedUser(email);
+            projectUserCredentialsFacade.deleteByAuthenticatedUser(email,projectId);
             return new ResponseEntity<>("", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("",HttpStatus.NOT_FOUND);

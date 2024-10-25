@@ -3,7 +3,9 @@ package com.timetracker.timetrackerapptesttask.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+/**
+ * Сущность, представляющая участие пользователя в проекте.
+ */
 @Entity
 @Table(name="participation")
 @Data

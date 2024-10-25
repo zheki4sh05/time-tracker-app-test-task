@@ -18,14 +18,16 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ActivityController {
 
-    @Autowired
-    private IActivityControl activityControl;
+
 
     @Autowired
-    private IProjectActivityFacade projectActivityFacade;
+    private IActivityControl activityControl; //сервис для управления активностями пользователей в рамках какого-то проекта
+
+    @Autowired
+    private IProjectActivityFacade projectActivityFacade;// фасад необходимый для взаимодействия сервисов для управления проектами и активностями
 
     @PostMapping("/create")
-    @PreAuthorize(value = "@cse.canAccessUser(#headers)")
+    @PreAuthorize(value = "@cse.canAccessUser(#headers)") //
     public ResponseEntity<?> createActivity(@RequestHeader Map<String, String> headers,
                                            @RequestBody CreateActivityDto createActivityDto) {
         try {
