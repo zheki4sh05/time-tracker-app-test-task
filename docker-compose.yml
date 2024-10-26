@@ -1,0 +1,30 @@
+version: "3.1"
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=lhs22LI=D=
+      - POSTGRES_DB=time-tracker-app
+    volumes:
+      - ./src/main/resources/db-init:/docker-entrypoint-initdb.d
+  app:
+    container_name: timetracker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/time-tracker-app?currentSchema=public
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=lhs22LI=D=
+    ports:
+      - "8080:8080"
+
+
+
+
